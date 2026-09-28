@@ -2,6 +2,7 @@ using Healthcare.Application.Interfaces;
 using Healthcare.Application.Services;
 using Healthcare.Infrastructure.Data;
 using Healthcare.Infrastructure.Repositories;
+using Healthcare.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,10 @@ builder.Services.AddDbContext<HealthcareDbContext>(options =>
 // Dependency Injection
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddHttpClient<INotificationService, NotificationService>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:3000");
+});
 
 var app = builder.Build();
 
