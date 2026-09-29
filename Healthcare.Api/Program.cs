@@ -25,9 +25,15 @@ builder.Services.AddDbContext<HealthcareDbContext>(options =>
 // Dependency Injection
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IPatientService, PatientService>();
+
 builder.Services.AddHttpClient<INotificationService, NotificationService>(client =>
 {
     client.BaseAddress = new Uri("http://localhost:3000");
+});
+
+builder.Services.AddHttpClient<IPythonAnalyticsService, PythonAnalyticsService>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:8000");
 });
 
 var app = builder.Build();
