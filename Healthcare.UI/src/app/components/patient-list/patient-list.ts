@@ -1,0 +1,54 @@
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
+
+import { Patient } from '../../models/patient.model';
+import { PatientService } from '../../services/patient.service';
+
+@Component({
+  selector: 'app-patient-list',
+  standalone: true,
+  imports: [DatePipe],
+  templateUrl: './patient-list.html',
+  styleUrl: './patient-list.scss'
+})
+export class PatientList implements OnInit {
+
+  private readonly patientService = inject(PatientService);
+
+  patients = signal<Patient[]>([]);
+  loading = signal(false);
+  errorMessage = signal('');
+
+  ngOnInit(): void {
+    this.loadPatients();
+  }
+
+  loadPatients(): void {
+
+    console.log('1. loadPatients() called');
+
+    this.loading.set(true);
+    this.errorMessage.set('');
+
+    this.patientService.getAll().subscribe({
+
+      next: (data) => {
+
+        console.log('2. API response received:', data);
+
+        this.patients.set(data);
+        this.loading.set(false);
+
+        console.log('3. loading set to:', this.loading());
+      },
+
+      error: (error) => {
+
+        console.error('4. API error:', error);
+
+        this.errorMessage.set('Unable to load patients.');
+        this.loading.set(false);
+      }
+    });
+  }
+}

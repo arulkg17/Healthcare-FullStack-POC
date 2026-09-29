@@ -1,0 +1,48 @@
+<h2>Patient List</h2>
+
+@if (loading()) {
+  <p>Loading patients...</p>
+}
+
+@if (errorMessage()) {
+  <p>{{ errorMessage() }}</p>
+}
+
+@if (!loading() && !errorMessage()) {
+
+  @if (patients().length === 0) {
+    <p>No patients found.</p>
+  }
+
+  @if (patients().length > 0) {
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Date of Birth</th>
+          <th>Gender</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Active</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (patient of patients(); track patient.patientId) {
+          <tr>
+            <td>{{ patient.patientId }}</td>
+            <td>
+              {{ patient.firstName }} {{ patient.lastName }}
+            </td>
+            <td>{{ patient.dateOfBirth | date }}</td>
+            <td>{{ patient.gender }}</td>
+            <td>{{ patient.phone }}</td>
+            <td>{{ patient.email }}</td>
+            <td>{{ patient.isActive ? 'Yes' : 'No' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+}
