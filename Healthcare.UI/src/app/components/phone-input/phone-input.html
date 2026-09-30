@@ -1,0 +1,18 @@
+<div class="phone-input">
+
+  <label for="phone">
+    Phone
+  </label>
+
+  <input
+    id="phone"
+    type="text"
+    [value]="value"
+    [disabled]="disabled"
+    placeholder="Enter 10 digit phone number"
+    maxlength="10"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+  />
+
+</div>

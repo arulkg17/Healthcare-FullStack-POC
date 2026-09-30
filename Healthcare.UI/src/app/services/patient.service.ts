@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Patient } from '../models/patient.model';
+import { CreatePatient } from '../models/create-patient.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -22,7 +23,7 @@ export class PatientService {
     return this.http.get<Patient>(`${this.apiUrl}/${id}`);
   }
 
-  create(patient: Patient): Observable<Patient> {
+  create(patient: CreatePatient): Observable<Patient> {
     return this.http.post<Patient>(this.apiUrl, patient);
   }
 

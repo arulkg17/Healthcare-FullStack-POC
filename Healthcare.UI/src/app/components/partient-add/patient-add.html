@@ -1,0 +1,141 @@
+<h2>Add Patient</h2>
+
+<form [formGroup]="patientForm" (ngSubmit)="submit()">
+  <!-- First Name -->
+  <div class="form-field">
+    <label>First Name</label>
+
+    <input
+      type="text"
+      formControlName="firstName"
+      placeholder="Enter first name"
+    />
+
+    @if ( patientForm.controls.firstName.touched &&
+    patientForm.controls.firstName.invalid ) {
+    <small class="error">
+      @if (patientForm.controls.firstName.errors?.['required']) { First name is
+      required. } @if (patientForm.controls.firstName.errors?.['minlength']) {
+      First name must be at least 2 characters. }
+    </small>
+    }
+  </div>
+
+  <!-- Last Name -->
+  <div class="form-field">
+    <label>Last Name</label>
+
+    <input
+      type="text"
+      formControlName="lastName"
+      placeholder="Enter last name"
+    />
+
+    @if ( patientForm.controls.lastName.touched &&
+    patientForm.controls.lastName.invalid ) {
+    <small class="error">
+      @if (patientForm.controls.lastName.errors?.['required']) { Last name is
+      required. } @if (patientForm.controls.lastName.errors?.['minlength']) {
+      Last name must be at least 2 characters. }
+    </small>
+    }
+  </div>
+
+  <!-- Date of Birth -->
+  <div class="form-field">
+    <label>Date of Birth</label>
+
+    <input type="date" formControlName="dateOfBirth" />
+
+    @if ( patientForm.controls.dateOfBirth.touched &&
+    patientForm.controls.dateOfBirth.invalid ) {
+    <small class="error">
+      @if (patientForm.controls.dateOfBirth.errors?.['required']) { Date of
+      birth is required. } @if
+      (patientForm.controls.dateOfBirth.errors?.['futureOrToday']) { Date of
+      birth must be in the past. } @if
+      (patientForm.controls.dateOfBirth.errors?.['invalidDate']) { Please enter
+      a valid date. }
+    </small>
+    }
+  </div>
+
+  <!-- Gender -->
+  <div class="form-field">
+    <label>Gender</label>
+
+    <select formControlName="gender">
+      <option value="">-- Select Gender --</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Other">Other</option>
+    </select>
+
+    @if ( patientForm.controls.gender.touched &&
+    patientForm.controls.gender.invalid ) {
+    <small class="error"> Gender is required. </small>
+    }
+  </div>
+
+  <!-- Phone -->
+  <div class="form-field">
+    <label>Phone</label>
+
+    <app-phone-input formControlName="phone"> </app-phone-input>
+
+    @if ( patientForm.controls.phone.touched &&
+    patientForm.controls.phone.invalid ) {
+    <small class="error">
+      @if (patientForm.controls.phone.errors?.['required']) { Phone is required.
+      } @if (patientForm.controls.phone.errors?.['pattern']) { Phone must
+      contain exactly 10 digits. }
+    </small>
+    }
+  </div>
+
+  <!-- Email -->
+  <div class="form-field">
+    <label>Email</label>
+
+    <input type="email" formControlName="email" placeholder="Enter email" />
+
+    @if ( patientForm.controls.email.touched &&
+    patientForm.controls.email.invalid ) {
+    <small class="error">
+      @if (patientForm.controls.email.errors?.['required']) { Email is required.
+      } @if (patientForm.controls.email.errors?.['email']) { Please enter a
+      valid email. }
+    </small>
+    }
+  </div>
+
+  <!-- Address -->
+  <div class="form-field">
+    <label>Address</label>
+
+    <textarea formControlName="address" placeholder="Enter address"> </textarea>
+
+    @if ( patientForm.controls.address.touched &&
+    patientForm.controls.address.invalid ) {
+    <small class="error"> Address is required. </small>
+    }
+  </div>
+
+  <!-- Active -->
+  <div class="form-field checkbox-field">
+    <label>
+      <input type="checkbox" formControlName="isActive" />
+
+      Active
+    </label>
+  </div>
+
+  @if (errorMessage) {
+  <p class="error">{{ errorMessage }}</p>
+  }
+
+  <!-- Submit -->
+  <button type="submit" [disabled]="saving">
+    {{ saving ? 'Saving...' : 'Add Patient' }}
+  </button>
+</form>
