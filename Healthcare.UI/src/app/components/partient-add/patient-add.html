@@ -130,12 +130,12 @@
     </label>
   </div>
 
-  @if (errorMessage) {
-  <p class="error">{{ errorMessage }}</p>
+  @if (errorMessage()) {
+  <p class="error">{{ errorMessage() }}</p>
   }
 
   <!-- Submit -->
-  <button type="submit" [disabled]="saving">
-    {{ saving ? 'Saving...' : 'Add Patient' }}
+  <button type="submit" [disabled]="saving()">
+    {{ saving() ? 'Saving...' : 'Add Patient' }}
   </button>
 </form>

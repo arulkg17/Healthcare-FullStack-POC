@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -25,8 +25,8 @@ export class PatientAdd {
   private readonly patientService = inject(PatientService);
   private readonly router = inject(Router);
 
-  saving = false;
-  errorMessage = '';
+  saving = signal(false);
+  errorMessage = signal('');
 
   patientForm = this.fb.group({
     firstName: [
@@ -95,8 +95,8 @@ export class PatientAdd {
 
     console.log('Saving patient:', patient);
 
-    this.saving = true;
-    this.errorMessage = '';
+    this.saving.set(true);
+    this.errorMessage.set('');
 
     // 3. Call API
     this.patientService.create(patient).subscribe({
@@ -105,7 +105,7 @@ export class PatientAdd {
 
         console.log('Patient created successfully:', response);
 
-        this.saving = false;
+        this.saving.set(false);
 
         // 4. Navigate back to patient list
         this.router.navigate(['/patients']);
@@ -115,9 +115,8 @@ export class PatientAdd {
 
         console.error('Create patient error:', error);
 
-        this.saving = false;
-        this.errorMessage =
-          'Unable to save patient. Please try again.';
+        this.saving.set(false);
+        this.errorMessage.set('Unable to save patient. Please try again.');
       }
     });
   }
