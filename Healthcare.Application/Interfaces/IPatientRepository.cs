@@ -1,4 +1,5 @@
-﻿using Healthcare.Domain.Entities;
+﻿using Healthcare.Application.DTOs;
+using Healthcare.Domain.Entities;
 
 namespace Healthcare.Application.Interfaces;
 
@@ -13,4 +14,7 @@ public interface IPatientRepository
     Task<PatientEntity?> UpdateAsync(PatientEntity patient);
 
     Task<bool> DeleteAsync(int patientId);
+
+    Task<IEnumerable<PatientEntity>> SearchAsync(string searchTerm);
+    Task<PatientStatisticsDto> GetStatisticsAsync();
 }

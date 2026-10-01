@@ -10,8 +10,26 @@
       + Add Patient
     </button>
   </div>
+  @if (statistics(); as stats) {
 
-  @if (loading()) {
+  <div class="statistics-grid">
+    <div class="stat-card">
+      <div class="stat-label">Total Patients</div>
+      <div class="stat-value">{{ stats.totalPatients }}</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Active Patients</div>
+      <div class="stat-value">{{ stats.activePatients }}</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Inactive Patients</div>
+      <div class="stat-value">{{ stats.inactivePatients }}</div>
+    </div>
+  </div>
+
+  } @if (loading()) {
   <div class="state-card">
     <div class="loading-spinner"></div>
     <p>Loading patients...</p>
@@ -26,7 +44,24 @@
     <p>There are currently no patients registered.</p>
   </div>
   } @if (patients().length > 0) {
-
+  <div class="search-section">
+    <form [formGroup]="searchForm">
+      <input
+        type="text"
+        formControlName="searchTerm"
+        placeholder="Search by name, email or phone..."
+      />
+    </form>
+  </div>
+  <div>
+    <button type="button" (click)="runConcatMapDemo()">Test concatMap</button>
+  </div>
+  <div>
+    <button type="button" (click)="runMergeMapDemo()">Test mergeMap</button>
+  </div>
+  <div>
+    <button type="button" (click)="runExhaustMapDemo()">Test exhaustMap</button>
+  </div>
   <div class="table-card">
     <div class="table-header">
       <div>

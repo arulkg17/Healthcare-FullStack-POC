@@ -13,4 +13,6 @@ public interface IPatientService
     Task<PatientDto?> UpdateAsync(int patientId, PatientDto patient);
 
     Task<bool> DeleteAsync(int patientId);
+    Task<IEnumerable<PatientDto>> SearchAsync(string searchTerm);
+    Task<PatientStatisticsDto> GetStatisticsAsync();
 }

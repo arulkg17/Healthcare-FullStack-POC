@@ -74,7 +74,18 @@ public class PatientService : IPatientService
     {
         return await _patientRepository.DeleteAsync(patientId);
     }
+    public async Task<IEnumerable<PatientDto>> SearchAsync(
+    string searchTerm)
+    {
+        var patients =
+            await _patientRepository.SearchAsync(searchTerm);
 
+        return patients.Select(MapToDto);
+    }
+    public async Task<PatientStatisticsDto> GetStatisticsAsync()
+    {
+        return await _patientRepository.GetStatisticsAsync();
+    }
     private static PatientEntity MapToEntity(PatientDto dto)
     {
         return new PatientEntity
@@ -106,4 +117,5 @@ public class PatientService : IPatientService
             IsActive = entity.IsActive
         };
     }
+    
 }

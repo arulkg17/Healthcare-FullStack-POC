@@ -81,4 +81,26 @@ public class PatientsController : ControllerBase
 
         return NoContent();
     }
+    [HttpGet("search")]
+    public async Task<ActionResult<IEnumerable<PatientDto>>> Search(
+    [FromQuery] PatientSearchDto request)
+    {
+        if (string.IsNullOrWhiteSpace(request.SearchTerm))
+        {
+            return Ok(Array.Empty<PatientDto>());
+        }
+
+        var patients =
+            await _patientService.SearchAsync(request.SearchTerm);
+
+        return Ok(patients);
+    }
+    [HttpGet("statistics")]
+    public async Task<ActionResult<PatientStatisticsDto>> GetStatistics()
+    {
+        var statistics =
+            await _patientService.GetStatisticsAsync();
+
+        return Ok(statistics);
+    }
 }

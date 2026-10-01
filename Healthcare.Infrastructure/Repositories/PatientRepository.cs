@@ -1,4 +1,5 @@
-﻿using Healthcare.Application.Interfaces;
+﻿using Healthcare.Application.DTOs;
+using Healthcare.Application.Interfaces;
 using Healthcare.Domain.Entities;
 using Healthcare.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -86,5 +87,36 @@ public class PatientRepository : IPatientRepository
         await _context.SaveChangesAsync();
 
         return true;
+    }
+    public async Task<IEnumerable<PatientEntity>> SearchAsync(
+    string searchTerm)
+    {
+        searchTerm = searchTerm.Trim();
+
+        return await _context.Patients
+            .Where(p =>
+                !p.IsDeleted &&
+                (
+                    p.FirstName.Contains(searchTerm) ||
+                    p.LastName.Contains(searchTerm) ||
+                    p.Email.Contains(searchTerm) ||
+                    p.Phone.Contains(searchTerm)
+                ))
+            .AsNoTracking()
+            .ToListAsync();
+    }
+    public async Task<PatientStatisticsDto> GetStatisticsAsync()
+    {
+        var patients = await _context.Patients
+            .Where(p => !p.IsDeleted)
+            .AsNoTracking()
+            .ToListAsync();
+
+        return new PatientStatisticsDto
+        {
+            TotalPatients = patients.Count,
+            ActivePatients = patients.Count(p => p.IsActive),
+            InactivePatients = patients.Count(p => !p.IsActive)
+        };
     }
 }
