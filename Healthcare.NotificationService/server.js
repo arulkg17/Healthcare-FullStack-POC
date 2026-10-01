@@ -1,17 +1,25 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
+const SmsService = require("./services/smsService");
 
 const app = express();
-
 const PORT = 3000;
 
-// Middleware
 app.use(express.json());
+
+const smsService = new SmsService();
 
 const emailTransporter = nodemailer.createTransport({
     host: "localhost",
     port: 1025,
     secure: false
+});
+
+app.get("/health", (req, res) => {
+    res.json({
+        service: "Healthcare Notification Service",
+        status: "Running"
+    });
 });
 
 app.post("/api/notifications/test-email", async (req, res) => {
@@ -50,20 +58,16 @@ app.post("/api/notifications/test-email", async (req, res) => {
     }
 });
 
-// Health check
-app.get("/health", (req, res) => {
-    res.json({
-        service: "Healthcare Notification Service",
-        status: "Running"
-    });
-});
-
-// Send notification
 app.post("/api/notifications", async (req, res) => {
 
-    const { patientId, type, message } = req.body;
+    const {
+        patientId,
+        type,
+        message
+    } = req.body;
 
     if (!patientId || !type || !message) {
+
         return res.status(400).json({
             success: false,
             message: "patientId, type and message are required"
@@ -73,6 +77,7 @@ app.post("/api/notifications", async (req, res) => {
     try {
 
         console.log("Notification received:");
+
         console.log({
             patientId,
             type,
@@ -82,10 +87,16 @@ app.post("/api/notifications", async (req, res) => {
         if (type.toLowerCase() === "email") {
 
             const info = await emailTransporter.sendMail({
+
                 from: "healthcare@localhost",
+
                 to: "test@example.com",
-                subject: `Healthcare Notification - Patient ${patientId}`,
+
+                subject:
+                    `Healthcare Notification - Patient ${patientId}`,
+
                 text: message,
+
                 html: `
                     <h2>Healthcare Notification</h2>
 
@@ -114,14 +125,22 @@ app.post("/api/notifications", async (req, res) => {
 
         if (type.toLowerCase() === "sms") {
 
-            console.log(
-                `SMS notification received for patient ${patientId}`
+            const phoneNumber = "5551234567";
+
+            const result = await smsService.sendSms(
+                phoneNumber,
+                message
             );
+
+            console.log("SMS sent successfully:");
+
+            console.log(result);
 
             return res.status(200).json({
                 success: true,
-                message: "SMS notification received. SMS provider integration is pending.",
-                notificationType: "SMS"
+                message: "SMS notification sent successfully.",
+                notificationType: "SMS",
+                messageId: result.messageId
             });
         }
 
@@ -144,9 +163,10 @@ app.post("/api/notifications", async (req, res) => {
     }
 });
 
-// Start server
 app.listen(PORT, () => {
+
     console.log(
         `Healthcare Notification Service running on port ${PORT}`
     );
+
 });
