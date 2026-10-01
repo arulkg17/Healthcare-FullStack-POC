@@ -1,4 +1,5 @@
 const express = require("express");
+const nodemailer = require("nodemailer");
 
 const app = express();
 
@@ -6,6 +7,48 @@ const PORT = 3000;
 
 // Middleware
 app.use(express.json());
+
+const emailTransporter = nodemailer.createTransport({
+    host: "localhost",
+    port: 1025,
+    secure: false
+});
+
+app.post("/api/notifications/test-email", async (req, res) => {
+
+    try {
+
+        const info = await emailTransporter.sendMail({
+            from: "healthcare@localhost",
+            to: "test@example.com",
+            subject: "Healthcare Notification Test",
+            text: "This is a test email from the Healthcare Notification Service.",
+            html: `
+                <h2>Healthcare Notification Test</h2>
+                <p>This email was sent from the Node.js Notification Service.</p>
+                <p>Mailpit received it successfully.</p>
+            `
+        });
+
+        console.log("Email sent:");
+        console.log(info.messageId);
+
+        return res.status(200).json({
+            success: true,
+            message: "Test email sent successfully.",
+            messageId: info.messageId
+        });
+
+    } catch (error) {
+
+        console.error("Email sending failed:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Email sending failed."
+        });
+    }
+});
 
 // Health check
 app.get("/health", (req, res) => {
@@ -16,7 +59,7 @@ app.get("/health", (req, res) => {
 });
 
 // Send notification
-app.post("/api/notifications", (req, res) => {
+app.post("/api/notifications", async (req, res) => {
 
     const { patientId, type, message } = req.body;
 
@@ -27,22 +70,78 @@ app.post("/api/notifications", (req, res) => {
         });
     }
 
-    console.log("Notification received:");
-    console.log({
-        patientId,
-        type,
-        message
-    });
+    try {
 
-    return res.status(200).json({
-        success: true,
-        message: "Notification processed successfully",
-        data: {
+        console.log("Notification received:");
+        console.log({
             patientId,
             type,
             message
+        });
+
+        if (type.toLowerCase() === "email") {
+
+            const info = await emailTransporter.sendMail({
+                from: "healthcare@localhost",
+                to: "test@example.com",
+                subject: `Healthcare Notification - Patient ${patientId}`,
+                text: message,
+                html: `
+                    <h2>Healthcare Notification</h2>
+
+                    <p>
+                        <strong>Patient ID:</strong>
+                        ${patientId}
+                    </p>
+
+                    <p>
+                        <strong>Message:</strong>
+                        ${message}
+                    </p>
+                `
+            });
+
+            console.log("Email sent:");
+            console.log(info.messageId);
+
+            return res.status(200).json({
+                success: true,
+                message: "Email notification sent successfully.",
+                notificationType: "Email",
+                messageId: info.messageId
+            });
         }
-    });
+
+        if (type.toLowerCase() === "sms") {
+
+            console.log(
+                `SMS notification received for patient ${patientId}`
+            );
+
+            return res.status(200).json({
+                success: true,
+                message: "SMS notification received. SMS provider integration is pending.",
+                notificationType: "SMS"
+            });
+        }
+
+        return res.status(400).json({
+            success: false,
+            message: `Unsupported notification type: ${type}`
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Notification processing failed:",
+            error
+        );
+
+        return res.status(500).json({
+            success: false,
+            message: "Notification processing failed."
+        });
+    }
 });
 
 // Start server
