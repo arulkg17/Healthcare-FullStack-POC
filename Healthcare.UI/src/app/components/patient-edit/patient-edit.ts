@@ -131,4 +131,7 @@ export class PatientEdit implements OnInit {
       },
     });
   }
+  cancel(): void {
+    this.router.navigate(["/patients"]);
+  }
 }

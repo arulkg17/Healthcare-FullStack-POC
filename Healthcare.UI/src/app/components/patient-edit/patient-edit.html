@@ -1,247 +1,179 @@
-<h2>Edit Patient</h2>
+<div class="page-container">
+  <div class="page-header">
+    <h2>Edit Patient</h2>
+    <p>Update patient information.</p>
+  </div>
 
-@if (loading()) {
-  <p>Loading patient...</p>
-}
+  @if (loading()) {
+  <div class="state-card">
+    <div class="loading-spinner"></div>
+    <p>Loading patient...</p>
+  </div>
+  } @if (errorMessage()) {
+  <div class="form-error">{{ errorMessage() }}</div>
+  } @if (!loading()) {
 
-@if (errorMessage()) {
-  <p class="error">
-    {{ errorMessage() }}
-  </p>
-}
+  <div class="form-card">
+    <form [formGroup]="patientForm" (ngSubmit)="submit()">
+      <div class="form-grid">
+        <!-- First Name -->
+        <div class="form-field">
+          <label for="firstName">First Name</label>
 
-@if (!loading()) {
+          <input
+            id="firstName"
+            type="text"
+            formControlName="firstName"
+            placeholder="Enter first name"
+          />
 
-  <form
-    [formGroup]="patientForm"
-    (ngSubmit)="submit()">
-
-    <div class="form-field">
-      <label for="firstName">
-        First Name
-      </label>
-
-      <input
-        id="firstName"
-        type="text"
-        formControlName="firstName"
-      />
-
-      @if (
-        patientForm.controls.firstName.touched &&
-        patientForm.controls.firstName.invalid
-      ) {
-        <small class="error">
-
-          @if (patientForm.controls.firstName.errors?.['required']) {
-            First name is required.
+          @if ( patientForm.controls.firstName.touched &&
+          patientForm.controls.firstName.invalid ) {
+          <small class="error">
+            @if (patientForm.controls.firstName.errors?.['required']) { First
+            name is required. } @if
+            (patientForm.controls.firstName.errors?.['minlength']) { First name
+            must contain at least 2 characters. }
+          </small>
           }
+        </div>
 
-          @if (patientForm.controls.firstName.errors?.['minlength']) {
-            First name must contain at least 2 characters.
+        <!-- Last Name -->
+        <div class="form-field">
+          <label for="lastName">Last Name</label>
+
+          <input
+            id="lastName"
+            type="text"
+            formControlName="lastName"
+            placeholder="Enter last name"
+          />
+
+          @if ( patientForm.controls.lastName.touched &&
+          patientForm.controls.lastName.invalid ) {
+          <small class="error">
+            @if (patientForm.controls.lastName.errors?.['required']) { Last name
+            is required. } @if
+            (patientForm.controls.lastName.errors?.['minlength']) { Last name
+            must contain at least 2 characters. }
+          </small>
           }
+        </div>
 
-        </small>
-      }
-    </div>
+        <!-- Date of Birth -->
+        <div class="form-field">
+          <label for="dateOfBirth">Date of Birth</label>
 
+          <input id="dateOfBirth" type="date" formControlName="dateOfBirth" />
 
-    <div class="form-field">
-      <label for="lastName">
-        Last Name
-      </label>
-
-      <input
-        id="lastName"
-        type="text"
-        formControlName="lastName"
-      />
-
-      @if (
-        patientForm.controls.lastName.touched &&
-        patientForm.controls.lastName.invalid
-      ) {
-        <small class="error">
-
-          @if (patientForm.controls.lastName.errors?.['required']) {
-            Last name is required.
+          @if ( patientForm.controls.dateOfBirth.touched &&
+          patientForm.controls.dateOfBirth.invalid ) {
+          <small class="error">
+            @if (patientForm.controls.dateOfBirth.errors?.['required']) { Date
+            of birth is required. } @if
+            (patientForm.controls.dateOfBirth.errors?.['futureOrToday']) { Date
+            of birth must be before today. } @if
+            (patientForm.controls.dateOfBirth.errors?.['invalidDate']) { Please
+            enter a valid date. }
+          </small>
           }
+        </div>
 
-          @if (patientForm.controls.lastName.errors?.['minlength']) {
-            Last name must contain at least 2 characters.
+        <!-- Gender -->
+        <div class="form-field">
+          <label for="gender">Gender</label>
+
+          <select id="gender" formControlName="gender">
+            <option value="">-- Select Gender --</option>
+
+            <option value="Male">Male</option>
+
+            <option value="Female">Female</option>
+
+            <option value="Other">Other</option>
+          </select>
+
+          @if ( patientForm.controls.gender.touched &&
+          patientForm.controls.gender.invalid ) {
+          <small class="error"> Gender is required. </small>
           }
+        </div>
 
-        </small>
-      }
-    </div>
+        <!-- Phone -->
+        <div class="form-field">
+          <label>Phone</label>
 
+          <app-phone-input formControlName="phone"> </app-phone-input>
 
-    <div class="form-field">
-      <label for="dateOfBirth">
-        Date of Birth
-      </label>
-
-      <input
-        id="dateOfBirth"
-        type="date"
-        formControlName="dateOfBirth"
-      />
-
-      @if (
-        patientForm.controls.dateOfBirth.touched &&
-        patientForm.controls.dateOfBirth.invalid
-      ) {
-        <small class="error">
-
-          @if (patientForm.controls.dateOfBirth.errors?.['required']) {
-            Date of birth is required.
+          @if ( patientForm.controls.phone.touched &&
+          patientForm.controls.phone.invalid ) {
+          <small class="error">
+            @if (patientForm.controls.phone.errors?.['required']) { Phone is
+            required. } @if (patientForm.controls.phone.errors?.['pattern']) {
+            Phone must contain exactly 10 digits. }
+          </small>
           }
+        </div>
 
-          @if (patientForm.controls.dateOfBirth.errors?.['futureOrToday']) {
-            Date of birth must be before today.
+        <!-- Email -->
+        <div class="form-field">
+          <label for="email">Email</label>
+
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="Enter email address"
+          />
+
+          @if ( patientForm.controls.email.touched &&
+          patientForm.controls.email.invalid ) {
+          <small class="error">
+            @if (patientForm.controls.email.errors?.['required']) { Email is
+            required. } @if (patientForm.controls.email.errors?.['email']) {
+            Please enter a valid email address. }
+          </small>
           }
+        </div>
 
-          @if (patientForm.controls.dateOfBirth.errors?.['invalidDate']) {
-            Please enter a valid date.
+        <!-- Address -->
+        <div class="form-field full-width">
+          <label for="address">Address</label>
+
+          <textarea
+            id="address"
+            formControlName="address"
+            placeholder="Enter patient address"
+          >
+          </textarea>
+
+          @if ( patientForm.controls.address.touched &&
+          patientForm.controls.address.invalid ) {
+          <small class="error"> Address is required. </small>
           }
+        </div>
 
-        </small>
-      }
-    </div>
+        <!-- Active -->
+        <div class="form-field checkbox-field full-width">
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="isActive" />
 
+            <span>Patient is Active</span>
+          </label>
+        </div>
+      </div>
 
-    <div class="form-field">
-      <label for="gender">
-        Gender
-      </label>
+      <div class="form-actions">
+        <button type="button" class="secondary-button" (click)="cancel()">
+          Cancel
+        </button>
 
-      <select
-        id="gender"
-        formControlName="gender">
+        <button type="submit" class="primary-button" [disabled]="saving()">
+          {{ saving() ? 'Saving...' : 'Update Patient' }}
+        </button>
+      </div>
+    </form>
+  </div>
 
-        <option value="">
-          Select Gender
-        </option>
-
-        <option value="Male">
-          Male
-        </option>
-
-        <option value="Female">
-          Female
-        </option>
-
-      </select>
-
-      @if (
-        patientForm.controls.gender.touched &&
-        patientForm.controls.gender.invalid
-      ) {
-        <small class="error">
-          Gender is required.
-        </small>
-      }
-    </div>
-
-
-    <div class="form-field">
-
-      <app-phone-input
-        formControlName="phone">
-      </app-phone-input>
-
-      @if (
-        patientForm.controls.phone.touched &&
-        patientForm.controls.phone.invalid
-      ) {
-        <small class="error">
-
-          @if (patientForm.controls.phone.errors?.['required']) {
-            Phone is required.
-          }
-
-          @if (patientForm.controls.phone.errors?.['pattern']) {
-            Phone must contain exactly 10 digits.
-          }
-
-        </small>
-      }
-
-    </div>
-
-
-    <div class="form-field">
-      <label for="email">
-        Email
-      </label>
-
-      <input
-        id="email"
-        type="email"
-        formControlName="email"
-      />
-
-      @if (
-        patientForm.controls.email.touched &&
-        patientForm.controls.email.invalid
-      ) {
-        <small class="error">
-
-          @if (patientForm.controls.email.errors?.['required']) {
-            Email is required.
-          }
-
-          @if (patientForm.controls.email.errors?.['email']) {
-            Please enter a valid email address.
-          }
-
-        </small>
-      }
-    </div>
-
-
-    <div class="form-field">
-      <label for="address">
-        Address
-      </label>
-
-      <textarea
-        id="address"
-        formControlName="address">
-      </textarea>
-
-      @if (
-        patientForm.controls.address.touched &&
-        patientForm.controls.address.invalid
-      ) {
-        <small class="error">
-          Address is required.
-        </small>
-      }
-    </div>
-
-
-    <div class="form-field checkbox-field">
-
-      <label>
-        <input
-          type="checkbox"
-          formControlName="isActive"
-        />
-
-        Active
-      </label>
-
-    </div>
-
-
-    <button
-      type="submit"
-      [disabled]="saving()">
-
-      {{ saving() ? 'Saving...' : 'Update Patient' }}
-
-    </button>
-
-  </form>
-}
+  }
+</div>

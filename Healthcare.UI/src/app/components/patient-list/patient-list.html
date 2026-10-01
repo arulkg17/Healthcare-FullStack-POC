@@ -1,40 +1,117 @@
-<h2>Patient List</h2>
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2>Patient Management</h2>
 
-@if (loading()) {
-<p>Loading patients...</p>
-} @if (errorMessage()) {
-<p>{{ errorMessage() }}</p>
-} @if (!loading() && !errorMessage()) { @if (patients().length === 0) {
-<p>No patients found.</p>
-} @if (patients().length > 0) {
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Date of Birth</th>
-      <th>Gender</th>
-      <th>Phone</th>
-      <th>Email</th>
-      <th>Active</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
+      <p class="page-subtitle">View and manage registered patients</p>
+    </div>
 
-  <tbody>
-    @for (patient of patients(); track patient.patientId) {
-    <tr>
-      <td>{{ patient.patientId }}</td>
-      <td>{{ patient.firstName }} {{ patient.lastName }}</td>
-      <td>{{ patient.dateOfBirth | date }}</td>
-      <td>{{ patient.gender }}</td>
-      <td>{{ patient.phone }}</td>
-      <td>{{ patient.email }}</td>
-      <td>{{ patient.isActive ? 'Yes' : 'No' }}</td>
-      <button (click)="edit(patient.patientId)">Edit</button>
-      <button (click)="delete(patient.patientId)">Delete</button>
-    </tr>
-    }
-  </tbody>
-</table>
-} }
+    <button class="add-button" type="button" (click)="addPatient()">
+      + Add Patient
+    </button>
+  </div>
+
+  @if (loading()) {
+  <div class="state-card">
+    <div class="loading-spinner"></div>
+    <p>Loading patients...</p>
+  </div>
+  } @if (errorMessage()) {
+  <div class="state-card error-state">
+    <p>{{ errorMessage() }}</p>
+  </div>
+  } @if (!loading() && !errorMessage()) { @if (patients().length === 0) {
+  <div class="state-card">
+    <h3>No Patients Found</h3>
+    <p>There are currently no patients registered.</p>
+  </div>
+  } @if (patients().length > 0) {
+
+  <div class="table-card">
+    <div class="table-header">
+      <div>
+        <h3>Patients</h3>
+        <span> {{ patients().length }} patient(s) </span>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Patient Name</th>
+            <th>Date of Birth</th>
+            <th>Gender</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th class="actions-column">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for ( patient of patients(); track patient.patientId ) {
+
+          <tr>
+            <td class="patient-id">#{{ patient.patientId }}</td>
+
+            <td class="patient-name">
+              {{ patient.firstName }} {{ patient.lastName }}
+            </td>
+
+            <td>{{ patient.dateOfBirth | date:'MMM d, yyyy' }}</td>
+
+            <td>{{ patient.gender }}</td>
+
+            <td>{{ patient.phone }}</td>
+
+            <td>{{ patient.email }}</td>
+
+            <td>
+              <span
+                class="status-badge"
+                [class.active]="patient.isActive"
+                [class.inactive]="!patient.isActive"
+              >
+                {{ patient.isActive ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+
+            <td class="actions-column">
+              <button
+                class="edit-button"
+                type="button"
+                (click)="edit(patient.patientId)"
+              >
+                Edit
+              </button>
+
+              <button
+                class="delete-button"
+                type="button"
+                (click)="delete(patient)"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  } }
+</div>
+@if (selectedPatient(); as patient) {
+
+<app-delete-confirmation
+  [patientName]="patient.firstName + ' ' + patient.lastName"
+  (confirmed)="confirmDelete()"
+  (cancelled)="cancelDelete()"
+>
+</app-delete-confirmation>
+
+}

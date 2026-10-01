@@ -1,0 +1,290 @@
+.page-container {
+  max-width: 1400px;
+  margin: 30px auto;
+  padding: 0 24px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.page-subtitle {
+  margin: 6px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* -------------------------
+   State / Loading
+------------------------- */
+
+.state-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.state-card h3 {
+  margin: 0 0 8px;
+  color: #374151;
+}
+
+.state-card p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.error-state {
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+
+.error-state p {
+  color: #b91c1c;
+}
+
+.loading-spinner {
+  width: 28px;
+  height: 28px;
+  margin: 0 auto 12px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* -------------------------
+   Table Card
+------------------------- */
+
+.table-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.table-header {
+  padding: 18px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.table-header h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  color: #1f2937;
+}
+
+.table-header span {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* -------------------------
+   Table
+------------------------- */
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1050px;
+}
+
+thead {
+  background: #f3f4f6;
+}
+
+th {
+  padding: 13px 16px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+td {
+  padding: 14px 16px;
+  font-size: 14px;
+  color: #4b5563;
+  border-bottom: 1px solid #f0f0f0;
+  white-space: nowrap;
+}
+
+tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+tbody tr:hover {
+  background: #f9fafb;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* -------------------------
+   Patient Data
+------------------------- */
+
+.patient-id {
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.patient-name {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* -------------------------
+   Status
+------------------------- */
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-badge.active {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.status-badge.inactive {
+  color: #991b1b;
+  background: #fee2e2;
+}
+
+/* -------------------------
+   Actions
+------------------------- */
+
+.actions-column {
+  text-align: center;
+}
+
+.actions-column button {
+  margin-right: 6px;
+}
+
+.actions-column button:last-child {
+  margin-right: 0;
+}
+
+.edit-button,
+.delete-button {
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.edit-button {
+  color: #1d4ed8;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+
+.edit-button:hover {
+  background: #dbeafe;
+}
+
+.delete-button {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.delete-button:hover {
+  background: #fee2e2;
+}
+
+/* -------------------------
+   Responsive
+------------------------- */
+
+@media (max-width: 768px) {
+
+  .page-container {
+    margin: 20px auto;
+    padding: 0 12px;
+  }
+
+  .page-header h2 {
+    font-size: 24px;
+  }
+
+  .table-card {
+    border-radius: 8px;
+  }
+
+  table {
+    min-width: 1000px;
+  }
+}
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.add-button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+}
+
+.add-button:hover {
+  background: #1d4ed8;
+}
+
+@media (max-width: 600px) {
+
+  .page-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .add-button {
+    width: 100%;
+  }
+}

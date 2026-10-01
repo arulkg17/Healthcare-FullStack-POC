@@ -1,4 +1,5 @@
 import { Component, OnInit, inject, signal } from "@angular/core";
+import { DeleteConfirmation } from "../delete-confirmation/delete-confirmation";
 import { Router } from "@angular/router";
 import { DatePipe } from "@angular/common";
 
@@ -8,7 +9,7 @@ import { PatientService } from "../../services/patient.service";
 @Component({
   selector: "app-patient-list",
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, DeleteConfirmation],
   templateUrl: "./patient-list.html",
   styleUrl: "./patient-list.scss",
 })
@@ -19,6 +20,7 @@ export class PatientList implements OnInit {
   patients = signal<Patient[]>([]);
   loading = signal(false);
   errorMessage = signal("");
+  selectedPatient = signal<Patient | null>(null);
 
   ngOnInit(): void {
     this.loadPatients();
@@ -48,26 +50,40 @@ export class PatientList implements OnInit {
       },
     });
   }
+  addPatient(): void {
+    this.router.navigate(["/patients/add"]);
+  }
   edit(id: number): void {
     this.router.navigate(["patients/edit", id]);
   }
-  delete(id: number): void {
-    const confirmed = confirm("Are you sure you want to delete this patient?");
+  delete(patient: Patient): void {
+    this.selectedPatient.set(patient);
+  }
+  confirmDelete(): void {
+    const patient = this.selectedPatient();
 
-    if (!confirmed) {
+    if (!patient) {
       return;
     }
 
-    this.patientService.delete(id).subscribe({
+    this.patientService.delete(patient.patientId).subscribe({
       next: () => {
-        console.log("Patient deleted:", id);
+        console.log("Patient deleted:", patient.patientId);
+
+        this.selectedPatient.set(null);
 
         this.loadPatients();
       },
 
       error: (error) => {
         console.error("Delete failed:", error);
+
+        this.selectedPatient.set(null);
       },
     });
+  }
+
+  cancelDelete(): void {
+    this.selectedPatient.set(null);
   }
 }

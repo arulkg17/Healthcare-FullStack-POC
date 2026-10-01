@@ -1,0 +1,41 @@
+@if (patientName) {
+
+<div class="dialog-backdrop">
+  <div
+    class="dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="delete-title"
+  >
+    <div class="dialog-header">
+      <div class="warning-icon">!</div>
+
+      <div>
+        <h2 id="delete-title">Delete Patient</h2>
+
+        <p>Please confirm this action.</p>
+      </div>
+    </div>
+
+    <div class="dialog-body">
+      <p>
+        Are you sure you want to delete
+        <strong>{{ patientName }}</strong>?
+      </p>
+
+      <p class="warning-message">This action cannot be undone.</p>
+    </div>
+
+    <div class="dialog-actions">
+      <button type="button" class="cancel-button" (click)="cancel()">
+        Cancel
+      </button>
+
+      <button type="button" class="delete-button" (click)="confirm()">
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
+
+}
